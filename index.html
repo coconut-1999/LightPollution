@@ -3,40 +3,121 @@
 <head>
   <title>A Light Pollution Test</title>
   <meta name="lightpollution" content="Test for Light Pollution">
-  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
 </head>
 <body>
-  <a-scene fog="type: exponential; color: #FFFFFF; density: 0.03;">
+      
+  <a-scene fog="type: exponential; color: #FFFFFF; density: 0.00;" scene-manager>
     <a-assets>
+      <!-- General -->
+      <audio id="dune_sound" src="https://cdn.glitch.global/b1f355cf-19bf-4792-a7cf-249901d1f656/dune_sound.mp3" preload="auto"></audio>
+      <audio id="llama_sound" src="https://cdn.glitch.global/f8df13fb-0790-4252-8f6c-e3923c159d48/footsteps-dirt-01-73777.mp3?v=1719768765060" preload="auto"></audio>
+      
+      <!--Atacama Desert-->
       <img id="ground" src="https://cdn.glitch.global/240f6c50-219a-49fa-a9c7-31bf9ffc1b26/nahaufnahme-mischung-von-tonpulver.jpg">
       <img id="stars" src="https://cdn.glitch.global/240f6c50-219a-49fa-a9c7-31bf9ffc1b26/eso0932a.jpg">
+      <img id="pollution" src="https://cdn.glitch.global/29fe2c43-5951-407b-a8f3-dad86386c1e2/lightpollution_texture.png">
+      <img id="hand_texture" src="https://cdn.glitch.global/b1f355cf-19bf-4792-a7cf-249901d1f656/Frame%201.png">
+      <a-asset-item id="llama" src="Llama_Animations.glb" preload="auto"></a-asset-item>
+      
+      <!--Münchberg-->
+      <img id="sky_mueb" src="https://cdn.glitch.global/240f6c50-219a-49fa-a9c7-31bf9ffc1b26/eso0932a.jpg">
+      <a-asset-item id="ground_mueb" src="https://cdn.glitch.global/f8df13fb-0790-4252-8f6c-e3923c159d48/muenchberg_test5.glb"></a-asset-item>
+
+      <!--Alps-->
+      <img id="sky_alps" src="https://cdn.glitch.global/240f6c50-219a-49fa-a9c7-31bf9ffc1b26/eso0932a.jpg">
+      <a-asset-item id="ground_alps" src="https://cdn.glitch.global/f8df13fb-0790-4252-8f6c-e3923c159d48/rural1.glb?v=1719744446159"></a-asset-item>
+      <img id="mountains" src="https://cdn.glitch.global/f8df13fb-0790-4252-8f6c-e3923c159d48/alpen10.png?v=1719744489630">
+      <img id="mountain_lights" src="https://cdn.glitch.global/f8df13fb-0790-4252-8f6c-e3923c159d48/alpen_lights2.png?v=1719744598926">
+      
     </a-assets>
+    
 
-    <!-- Set up environment with atmosphere -->
-    <a-entity environment="preset: default; atmosphere: true; lighting: true;"></a-entity>
+  
+    <!-- Scene Atacama Desert -->
+    <a-sphere id="scene-atacama" src="#stars" position="0 0 0" rotation="0 0 0" radius="100">
+            
+      <!-- Scene -->
+      <a-entity environment="preset: yavapai; atmosphere: true; groundColor: #000000; groundColor2: #070300; dressingColor: #070300; skyType: none;"></a-entity>
+      <a-entity gltf-model="#llama" 
+                animation-mixer="clip: 18; loop: repeat; repetitions: Infinity; clampWhenFinished: false; crossFadeDuration: 0; timeScale: 0.5" 
+                position="2 0 2" 
+                scale="1 1 1"
+                random-walk>
+        <a-entity id="llama-sound" sound="src: #llama_sound; autoplay: true; loop: true; volume: 1;distanceModel: inverse; maxDistance: 20"></a-entity>
+      </a-entity>
+      <a-sky src="#stars" position="0 0 0" rotation="0 0 45" radius="100"></a-sky>
+      
+      <!-- Transition Boxes -->
+      <a-box position="0 0 5" rotation="0 0 0" color="#FFAA00" change-on-click="target: 244 3 31" hover-effect="hoverColor: #FF0000; scaleIncrement: 1.2"></a-box>
+      <a-text font="kelsonsans" value="Muenchberg" width="14" position="-3 0.25 6"></a-text>
+      <a-box position="2 0 5" rotation="0 0 0" color="#FFAA00" change-on-click="target: 510 0 25" hover-effect="hoverColor: #FF0000; scaleIncrement: 1.2"></a-box>
+      <a-text font="kelsonsans" value="Alps" width="14" position="2 0.25 6"></a-text>
+      
+      
+      <!-- Lights and Sound -->
+      <a-entity id="atacama-lights" light="type: point; color: #ffffff; intensity: 4" position="0 100 100" light-halo></a-entity>
+      <a-entity id="atacama-sound" sound="src: #dune_sound; autoplay: true; loop: true; volume: 1;"></a-entity>
+    </a-sphere>
+    
+    
 
-    <!-- Sky background -->
-    <a-sky src="#stars" rotation="0 0 45" radius=20></a-sky>
-
-    <!-- Ground plane -->
-    <a-plane material="color: #FFFFFF; src: #ground; repeat: 5000 5000; normal-texture-repeat: 5000 5000;"
-      height="1000"
-      width="1000"
-      rotation="-90 0 0"
-      position="0 0 0"
-    ></a-plane>
-
+    <!-- Scene Münchberg -->
+    <a-sphere id="scene-muenchberg" src="#stars" position="250 0 0" rotation="0 0 0" radius="100">
+            
+      <!-- Scene -->
+      <a-entity gltf-model="#ground_mueb" position="-9.52279 -8 30" rotation="0 270 0" scale="0.7 0.7 0.7"></a-entity>
+      <!-- <a-entity gltf-model="#windturbine" position="-6 3 26" animation-mixer scale="1 1 1"></a-entity>-->
+      <a-sky src="#sky_mueb" position="0 0 0" rotation="0 0 45" radius="100"></a-sky>
+      
+      <!-- Transition Boxes -->
+      <a-box position="-6 3 26" rotation="0 0 0" color="#FFAA00" change-on-click="target: 0 0 10" hover-effect="hoverColor: #FF0000; scaleIncrement: 1.2"></a-box>
+      <a-text font="kelsonsans" value="Atacama" width="14" position="-9 3.25 27"></a-text>
+      <a-box position="-4 3 26" rotation="0 0 0" color="#FFAA00" change-on-click="target: 510 0 25" hover-effect="hoverColor: #FF0000; scaleIncrement: 1.2"></a-box>
+      <a-text font="kelsonsans" value="Alps" width="14" position="-4 3.25 27"></a-text>
+      
+      
+      <!-- Lights and Sound -->
+      <a-entity id="mueb-lights" light="type: point; color: #ffffff; intensity: 0.6" position="0 100 0" light-halo></a-entity>
+      <a-entity id="mueb-sound" sound="src: #dune_sound; autoplay: true; loop: true; volume: 1;"></a-entity>
+    </a-sphere>
+    
+    
+    <!-- Scene Alps -->
+    <a-sphere id="scene-alps" src="#stars" position="500 0 0" rotation="0 0 0" radius="100">
+            
+      <!-- Scene -->
+      <a-entity gltf-model="#ground_alps" position="0 -6 0" rotation="0 90 0" scale="1 1 1"></a-entity>
+      <a-sky material="src: #sky_alps; side:double" position="0 0 0" rotation="0 0 45" radius="100"></a-sky>
+      <a-cylinder radius="90" height="100" position="0 10 0" open-ended="true" material="side:double; transparent:true; shader:flat; " src="#mountains"></a-cylinder>
+      <a-image src="#mountain_lights" position="-5.34244 -1.33015 83.68176" width="4" height="2.25" material="" geometry="" visible="" scale="2 2 2"></a-image>
+      
+      <!-- Transition Boxes -->
+      <a-box position="8 0 20" rotation="0 0 0" color="#FFAA00" change-on-click="target: 0 0 10" hover-effect="hoverColor: #FF0000; scaleIncrement: 1.2"></a-box>
+      <a-text font="kelsonsans" value="Atacama" width="14" position="6 0.25 21"></a-text>
+      <a-box position="10 0 20" rotation="0 0 0" color="#FFAA00" change-on-click="target: 244 3 31" hover-effect="hoverColor: #FF0000; scaleIncrement: 1.2"></a-box>
+      <a-text font="kelsonsans" value="Muenchberg" width="14" position="11 0.25 21"></a-text>
+      
+      <!-- Lights and Sound -->
+      <a-entity id="alps-lights" light="type: point; color: #ffffff; intensity: 0.6" position="0 100 0" light-halo></a-entity>
+      <a-entity id="alps-sound" sound="src: #dune_sound; autoplay: true; loop: true; volume: 1;"></a-entity>
+    </a-sphere>
+    
 
     <!-- Player entity with camera -->
-    <a-entity id="player" progressive-controls movement-controls="fly: true; speed: 0.3"
-      position="0 0.1 1"
+    <a-entity id="player" position="0 0 10" progressive-controls movement-controls="fly: true; speed: 0.3"
       networked="template:#avatar-template;attachTemplateToLocal:true;"
     >
+      <a-entity laser-controls="hand: right"></a-entity>
+      <a-entity oculus-touch-controls="hand: left">
+        <a-plane src="#hand_texture" width="0.6" 0.6 height="0.3" position="0 0.1 -0.1" rotation="-40 0 0"></a-plane>
+      </a-entity>
       <a-entity camera look-controls></a-entity>
-      <a-entity class="right-controller"></a-entity>
-      <a-entity class="left-controller"></a-entity>
     </a-entity>
+    
+    <!-- import javascript file for movement controls -->
+    <script src="movements.js"></script>
   </a-scene>
 </body>
 </html>
